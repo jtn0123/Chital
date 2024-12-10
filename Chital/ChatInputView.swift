@@ -5,6 +5,7 @@ struct ChatInputView: View {
     @FocusState var isTextFieldFocused: Bool
     let isThinking: Bool
     let onSubmit: () -> Void
+    let onCancel: () -> Void
     
     @Binding var selectedModel: String
     let modelOptions: [String]
@@ -39,6 +40,18 @@ struct ChatInputView: View {
                     .onSubmit(onSubmit)
                     .disabled(isThinking || modelOptions.isEmpty)
                     .focused($isTextFieldFocused)
+                if isThinking {Button(action: {
+                    onCancel()
+                }) {
+                    Image(systemName: "octagon.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 30)
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .keyboardShortcut(.escape, modifiers: [])
+                }
             }
             .padding(.horizontal)
         }
@@ -58,6 +71,7 @@ struct ChatInputView: View {
                 isTextFieldFocused: _isTextFieldFocused,
                 isThinking: false,
                 onSubmit: {},
+                onCancel: {},
                 selectedModel: $selectedModel,
                 modelOptions: modelOptions
             )
