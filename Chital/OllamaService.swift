@@ -71,6 +71,7 @@ class OllamaService {
                     let (stream, _) = try await URLSession.shared.bytes(for: req)
                     
                     for try await line in stream.lines {
+                        try Task.checkCancellation()
                         if let data = line.data(using: .utf8),
                            let res = try? JSONDecoder().decode(OllamaChatResponse.self, from: data) {
                             if let content = res.message?.content {

@@ -9,6 +9,8 @@ struct ChatThreadView: View {
     @Bindable var thread: ChatThread
     @Binding var isDraft: Bool
     
+    @State private var inferenceTask: Task<Void, Never>?
+    
     @FocusState private var isTextFieldFocused: Bool
     @State private var currentInputMessage: String = ""
     
@@ -48,6 +50,7 @@ struct ChatThreadView: View {
                 isTextFieldFocused: _isTextFieldFocused,
                 isThinking: thread.isThinking,
                 onSubmit: insertChatMessage,
+                onCancel: cancelChatMessage,
                 selectedModel: Binding(
                     get: { thread.selectedModel ?? "" },
                     set: { thread.selectedModel = $0 }
@@ -100,7 +103,7 @@ struct ChatThreadView: View {
         currentInputMessage = ""
         thread.isThinking = true
         
-        Task {
+        inferenceTask = Task {
             do {
                 ensureModelSelected()
                 guard let selectedModel = thread.selectedModel, !selectedModel.isEmpty else {
@@ -118,6 +121,9 @@ struct ChatThreadView: View {
                 }
                 
                 for try await partialResponse in stream {
+                    if Task.isCancelled {
+                        break
+                    }
                     await MainActor.run {
                         assistantMessage.text += partialResponse
                         scrollProxy?.scrollTo(assistantMessage.id, anchor: .bottom)
@@ -154,6 +160,13 @@ struct ChatThreadView: View {
         context.insert(newMessage)
         
         sendMessageStream()
+    }
+    
+    private func cancelChatMessage() {
+        guard inferenceTask != nil else { return }
+        inferenceTask?.cancel()
+        inferenceTask = nil
+        thread.isThinking = false
     }
     
     private func retry(_ message: ChatMessage) {
