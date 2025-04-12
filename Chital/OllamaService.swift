@@ -8,7 +8,18 @@ protocol NetworkSession {
 }
 
 // --- Make URLSession conform ---
-extension URLSession: NetworkSession {}
+extension URLSession: NetworkSession {
+    // Provide implementations that call the original URLSession methods
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        // Explicitly call the instance method on self (which is the URLSession instance)
+        return try await self.data(for: request, delegate: nil)
+    }
+    
+    func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse) {
+        // Explicitly call the instance method on self (which is the URLSession instance)
+        return try await self.bytes(for: request, delegate: nil)
+    }
+}
 // --- Protocol End ---
 
 struct OllamaChatMessage: Codable {
