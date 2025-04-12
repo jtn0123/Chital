@@ -248,18 +248,16 @@ final class OllamaServiceTests: XCTestCase {
         // Act
         let stream = ollamaService.streamConversation(model: model, messages: messages)
         var receivedContents: [String] = []
-        var receivedError: Error? = nil
         
         do {
             for try await contentChunk in stream {
                 receivedContents.append(contentChunk)
             }
         } catch {
-            receivedError = error
+            XCTFail("Caught unexpected error type: \(error)")
         }
         
         // Assert
-        XCTAssertNil(receivedError, "Stream should finish without error.")
         XCTAssertEqual(receivedContents, expectedContents, "Received stream contents should match expected order and content.")
         XCTAssertEqual(mockSession.lastRequest?.url, url, "Request URL should match.")
         XCTAssertEqual(mockSession.lastRequest?.httpMethod, "POST", "HTTP method should be POST.")
@@ -296,7 +294,6 @@ final class OllamaServiceTests: XCTestCase {
         // Act
         let stream = ollamaService.streamConversation(model: model, messages: messages)
         var receivedContents: [String] = []
-        var receivedError: Error? = nil
         
         do {
             // Attempt to iterate through the stream
@@ -315,6 +312,63 @@ final class OllamaServiceTests: XCTestCase {
         
         // Assert: Check that no content was received before the error
         XCTAssertTrue(receivedContents.isEmpty, "No content should have been received before the error was thrown.")
+        XCTAssertEqual(mockSession.lastRequest?.url, url, "Request URL should match.")
+        XCTAssertEqual(mockSession.lastRequest?.httpMethod, "POST", "HTTP method should be POST.")
+    }
+
+    func testStreamConversation_Cancellation() async throws {
+        // Arrange
+        let model = "test-cancel-model"
+        let messages = [OllamaChatMessage(role: "user", content: "Cancel test")]
+        let url = expectedURL(path: "chat")
+        let expectedReceivedContent = ["Chunk1", "Chunk2"]
+
+        // Create mock stream data that sends a few chunks but never finishes
+        let streamJsonLines: [String] = [
+            "{\"message\":{\"role\":\"assistant\",\"content\":\"Chunk1\"},\"done\":false}",
+            "{\"message\":{\"role\":\"assistant\",\"content\":\"Chunk2\"},\"done\":false}",
+            // Add a non-JSON line to ensure the test stream continues if not cancelled
+            "This line is not JSON and should not be processed, but keeps the stream open.", 
+             "Another non-JSON line."
+        ]
+
+        // Use the helper to create mock AsyncBytes and URLResponse
+        // This helper correctly uses URLSession.bytes(for:) on a data URL
+        let (asyncBytes, urlResponse) = try await MockNetworkSession.makeAsyncBytes(from: streamJsonLines, url: url)
+
+        // Configure the mock session
+        mockSession.mockResponses[url] = MockResponse(asyncBytes: asyncBytes, response: urlResponse)
+
+        // Act
+        let stream = ollamaService.streamConversation(model: model, messages: messages)
+        var receivedContents: [String] = []
+        var receivedError: Error? = nil
+        var iterationCount = 0
+
+        do {
+            for try await contentChunk in stream {
+                iterationCount += 1
+                receivedContents.append(contentChunk)
+                // Cancel after receiving the second chunk
+                if iterationCount == 2 {
+                    print("Test: Calling cancelStream...")
+                    ollamaService.cancelStream()
+                }
+            }
+             XCTFail("Stream finished naturally, expected it to be cancelled.")
+        } catch is CancellationError {
+            // This is the expected outcome
+            print("Test: Caught CancellationError as expected.")
+            receivedError = CancellationError() // Assign to satisfy check later if needed
+        } catch {
+            receivedError = error
+            XCTFail("Caught unexpected error type: \(error)")
+        }
+
+        // Assert
+        XCTAssertNotNil(receivedError, "An error (CancellationError) should have been caught.")
+        XCTAssertTrue(receivedError is CancellationError, "The error should be a CancellationError.")
+        XCTAssertEqual(receivedContents, expectedReceivedContent, "Only the first two chunks should have been received.")
         XCTAssertEqual(mockSession.lastRequest?.url, url, "Request URL should match.")
         XCTAssertEqual(mockSession.lastRequest?.httpMethod, "POST", "HTTP method should be POST.")
     }

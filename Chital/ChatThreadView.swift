@@ -9,7 +9,8 @@ struct ChatThreadView: View {
     @Bindable var thread: ChatThread
     @Binding var isDraft: Bool
     
-    @State private var inferenceTask: Task<Void, Never>?
+    @StateObject private var ollamaService = OllamaService()
+    @State private var streamProcessingTask: Task<Void, Never>?
     
     @FocusState private var isTextFieldFocused: Bool
     @State private var currentInputMessage: String = ""
@@ -103,43 +104,76 @@ struct ChatThreadView: View {
         currentInputMessage = ""
         thread.isThinking = true
         
-        inferenceTask = Task {
+        streamProcessingTask?.cancel()
+        
+        streamProcessingTask = Task {
+            var assistantMessage: ChatMessage? = nil
+            defer {
+                Task { @MainActor in
+                    thread.isThinking = false
+                    focusTextField()
+                    streamProcessingTask = nil
+                    print("ChatThreadView: Stream processing task finished.")
+                }
+            }
             do {
                 ensureModelSelected()
                 guard let selectedModel = thread.selectedModel, !selectedModel.isEmpty else {
                     throw NSError(domain: "ChatView", code: 1, userInfo: [NSLocalizedDescriptionKey: "No model selected"])
                 }
                 
-                let ollamaService = OllamaService()
                 let ollamaMessages = chronologicalMessages.map { OllamaChatMessage(role: $0.isUser ? "user" : "assistant", content: $0.text) }
                 let stream = ollamaService.streamConversation(model: selectedModel, messages: ollamaMessages)
-                let assistantMessage = ChatMessage(text: "", isUser: false, timestamp: Date())
                 
+                let initialAssistantMessage = ChatMessage(text: "", isUser: false, timestamp: Date())
                 await MainActor.run {
-                    thread.messages.append(assistantMessage)
-                    context.insert(assistantMessage)
+                    thread.messages.append(initialAssistantMessage)
+                    context.insert(initialAssistantMessage)
+                    assistantMessage = initialAssistantMessage
                 }
                 
+                print("ChatThreadView: Starting stream consumption...")
                 for try await partialResponse in stream {
-                    if Task.isCancelled {
-                        break
-                    }
                     await MainActor.run {
-                        assistantMessage.text += partialResponse
-                        scrollProxy?.scrollTo(assistantMessage.id, anchor: .bottom)
+                        assistantMessage?.text += partialResponse
+                        if let msgId = assistantMessage?.id {
+                            scrollProxy?.scrollTo(msgId, anchor: .bottom)
+                        }
                     }
                 }
+                print("ChatThreadView: Stream consumption finished normally.")
                 
                 await MainActor.run {
-                    thread.isThinking = false
                     if !thread.hasReceivedFirstMessage {
                         thread.hasReceivedFirstMessage = true
                         setThreadTitle()
                     }
-                    focusTextField()
                 }
+                
+            } catch is CancellationError {
+                print("ChatThreadView: Stream task cancelled.")
+                Task { @MainActor in
+                    if let msg = assistantMessage, msg.text.isEmpty {
+                        context.delete(msg)
+                        if let index = thread.messages.firstIndex(where: { $0.id == msg.id }) {
+                            thread.messages.remove(at: index)
+                        }
+                    }
+                }
+                return
             } catch {
+                // Log the specific error before calling handleError
+                print("ChatThreadView: Caught in general catch block. Error type: \(type(of: error)), Description: \(error.localizedDescription)")
+                print("ChatThreadView: Stream task failed with error: \(error).")
                 await handleError(error)
+                Task { @MainActor in
+                    if let msg = assistantMessage {
+                        context.delete(msg)
+                        if let index = thread.messages.firstIndex(where: { $0.id == msg.id }) {
+                            thread.messages.remove(at: index)
+                        }
+                    }
+                }
             }
         }
     }
@@ -163,16 +197,18 @@ struct ChatThreadView: View {
     }
     
     private func cancelChatMessage() {
-        guard inferenceTask != nil else { return }
-        inferenceTask?.cancel()
-        inferenceTask = nil
-        thread.isThinking = false
+        print("ChatThreadView: Cancel button pressed.")
+        ollamaService.cancelStream()
+        streamProcessingTask?.cancel()
+        streamProcessingTask = nil
     }
     
     private func retry(_ message: ChatMessage) {
         guard let index = chronologicalMessages.firstIndex(where: { $0.id == message.id }) else {
             return
         }
+        
+        cancelChatMessage()
         
         let messagesToRemove = Array(chronologicalMessages[index...])
         for messageToRemove in messagesToRemove {
@@ -186,9 +222,15 @@ struct ChatThreadView: View {
     }
     
     private func handleError(_ error: Error) async {
+        // Log the error received by handleError
+        print("ChatThreadView: handleError received error. Type: \(type(of: error)), Description: \(error.localizedDescription)")
+        guard !(error is CancellationError) else {
+            print("ChatThreadView: Handling cancellation, suppressing error alert.")
+            return
+        }
+        
         await MainActor.run {
             shouldShowErrorAlert = true
-            thread.isThinking = false
             
             let networkError = error as? URLError
             let defaultErrorMessage = "An unexpected error occurred while communicating with the Ollama API: \(error.localizedDescription)"
@@ -216,9 +258,9 @@ struct ChatThreadView: View {
                 }
                 
                 var ollamaMessages = chronologicalMessages.map { OllamaChatMessage(role: $0.isUser ? "user" : "assistant", content: $0.text) }
+                ollamaMessages = ollamaMessages.filter { !$0.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
                 ollamaMessages.append(OllamaChatMessage(role: "user", content: titleSummaryPrompt))
                 
-                let ollamaService = OllamaService()
                 let summaryResponse = try await ollamaService.sendSingleMessage(model: selectedModel, messages: ollamaMessages)
                 
                 await MainActor.run {
@@ -231,8 +273,10 @@ struct ChatThreadView: View {
     }
     
     private func setThreadTitle(_ summary: String) {
-        thread.title = summary
-        context.insert(thread)
+        let trimmedSummary = summary.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedSummary.isEmpty {
+            thread.title = trimmedSummary
+        }
     }
     
     private var chronologicalMessages: [ChatMessage] {

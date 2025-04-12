@@ -26,17 +26,6 @@
     },
     {
       "parallelizable" : true,
-      "skippedTests" : [
-        "Chital_UITests\/example()"
-      ],
-      "target" : {
-        "containerPath" : "container:Chital.xcodeproj",
-        "identifier" : "D0ED4FEF2DAA320200787DA3",
-        "name" : "Chital-UITests"
-      }
-    },
-    {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Chital.xcodeproj",
         "identifier" : "D0B5141E2DAA392800B079FD",

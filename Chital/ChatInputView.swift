@@ -40,6 +40,7 @@ struct ChatInputView: View {
                     .onSubmit(onSubmit)
                     .disabled(isThinking || modelOptions.isEmpty)
                     .focused($isTextFieldFocused)
+                    .accessibilityIdentifier("chatInputTextField")
                 if isThinking {Button(action: {
                     onCancel()
                 }) {
@@ -47,10 +48,11 @@ struct ChatInputView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(height: 30)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.red)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .keyboardShortcut(.escape, modifiers: [])
+                .accessibilityIdentifier("cancelStreamingButton")
                 }
             }
             .padding(.horizontal)

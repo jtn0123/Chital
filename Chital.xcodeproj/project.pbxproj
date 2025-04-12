@@ -23,6 +23,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D0B514252DAA392800B079FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 85156A322CA6BFD20061ED78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85156A392CA6BFD20061ED78;
+			remoteInfo = Chital;
+		};
 		D0ED4FE12DAA29CF00787DA3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 85156A322CA6BFD20061ED78 /* Project object */;
@@ -47,10 +54,13 @@
 		85156A532CA6C0210061ED78 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		85156A542CA6C0210061ED78 /* ChatModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
 		85156A552CA6C0210061ED78 /* ChatThreadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatThreadView.swift; sourceTree = "<group>"; };
+		D073E38F2DAAD4DA00DCF207 /* Chital.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Chital.xctestplan; sourceTree = "<group>"; };
+		D0B5141F2DAA392800B079FD /* ChitalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChitalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0ED4FDD2DAA29CF00787DA3 /* ChitalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChitalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		D0B514202DAA392800B079FD /* ChitalUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ChitalUITests; sourceTree = "<group>"; };
 		D0ED4FDE2DAA29CF00787DA3 /* ChitalTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ChitalTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -60,6 +70,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				85156A602CA6C0E80061ED78 /* MarkdownUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0B5141C2DAA392800B079FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,8 +93,10 @@
 		85156A312CA6BFD20061ED78 = {
 			isa = PBXGroup;
 			children = (
+				D073E38F2DAAD4DA00DCF207 /* Chital.xctestplan */,
 				85156A3C2CA6BFD20061ED78 /* Chital */,
 				D0ED4FDE2DAA29CF00787DA3 /* ChitalTests */,
+				D0B514202DAA392800B079FD /* ChitalUITests */,
 				85156A3B2CA6BFD20061ED78 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,6 +106,7 @@
 			children = (
 				85156A3A2CA6BFD20061ED78 /* Chital.app */,
 				D0ED4FDD2DAA29CF00787DA3 /* ChitalTests.xctest */,
+				D0B5141F2DAA392800B079FD /* ChitalUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,6 +162,29 @@
 			productReference = 85156A3A2CA6BFD20061ED78 /* Chital.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D0B5141E2DAA392800B079FD /* ChitalUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0B514272DAA392800B079FD /* Build configuration list for PBXNativeTarget "ChitalUITests" */;
+			buildPhases = (
+				D0B5141B2DAA392800B079FD /* Sources */,
+				D0B5141C2DAA392800B079FD /* Frameworks */,
+				D0B5141D2DAA392800B079FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0B514262DAA392800B079FD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D0B514202DAA392800B079FD /* ChitalUITests */,
+			);
+			name = ChitalUITests;
+			packageProductDependencies = (
+			);
+			productName = ChitalUITests;
+			productReference = D0B5141F2DAA392800B079FD /* ChitalUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		D0ED4FDC2DAA29CF00787DA3 /* ChitalTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D0ED4FE52DAA29CF00787DA3 /* Build configuration list for PBXNativeTarget "ChitalTests" */;
@@ -178,6 +221,10 @@
 					85156A392CA6BFD20061ED78 = {
 						CreatedOnToolsVersion = 15.4;
 					};
+					D0B5141E2DAA392800B079FD = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 85156A392CA6BFD20061ED78;
+					};
 					D0ED4FDC2DAA29CF00787DA3 = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 85156A392CA6BFD20061ED78;
@@ -202,6 +249,7 @@
 			targets = (
 				85156A392CA6BFD20061ED78 /* Chital */,
 				D0ED4FDC2DAA29CF00787DA3 /* ChitalTests */,
+				D0B5141E2DAA392800B079FD /* ChitalUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -213,6 +261,13 @@
 			files = (
 				85156A472CA6BFD30061ED78 /* Preview Assets.xcassets in Resources */,
 				85156A442CA6BFD30061ED78 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0B5141D2DAA392800B079FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +298,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0B5141B2DAA392800B079FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0ED4FD92DAA29CF00787DA3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -253,6 +315,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D0B514262DAA392800B079FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85156A392CA6BFD20061ED78 /* Chital */;
+			targetProxy = D0B514252DAA392800B079FD /* PBXContainerItemProxy */;
+		};
 		D0ED4FE22DAA29CF00787DA3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 85156A392CA6BFD20061ED78 /* Chital */;
@@ -445,6 +512,40 @@
 			};
 			name = Release;
 		};
+		D0B514282DAA392800B079FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2YK4Y47MCL;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourname.ChitalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Chital;
+			};
+			name = Debug;
+		};
+		D0B514292DAA392800B079FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2YK4Y47MCL;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourname.ChitalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Chital;
+			};
+			name = Release;
+		};
 		D0ED4FE32DAA29CF00787DA3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -502,6 +603,15 @@
 			buildConfigurations = (
 				85156A4C2CA6BFD30061ED78 /* Debug */,
 				85156A4D2CA6BFD30061ED78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0B514272DAA392800B079FD /* Build configuration list for PBXNativeTarget "ChitalUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0B514282DAA392800B079FD /* Debug */,
+				D0B514292DAA392800B079FD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
