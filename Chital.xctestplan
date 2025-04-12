@@ -1,0 +1,48 @@
+{
+  "configurations" : [
+    {
+      "id" : "30D3439A-6259-409F-A958-042A5B99B0F5",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Chital.xcodeproj",
+      "identifier" : "85156A392CA6BFD20061ED78",
+      "name" : "Chital"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Chital.xcodeproj",
+        "identifier" : "D0ED4FDC2DAA29CF00787DA3",
+        "name" : "ChitalTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "skippedTests" : [
+        "Chital_UITests\/example()"
+      ],
+      "target" : {
+        "containerPath" : "container:Chital.xcodeproj",
+        "identifier" : "D0ED4FEF2DAA320200787DA3",
+        "name" : "Chital-UITests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Chital.xcodeproj",
+        "identifier" : "D0B5141E2DAA392800B079FD",
+        "name" : "ChitalUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
