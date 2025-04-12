@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,6 +22,16 @@
 		85156A602CA6C0E80061ED78 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 85156A5F2CA6C0E80061ED78 /* MarkdownUI */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D0ED4FE12DAA29CF00787DA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 85156A322CA6BFD20061ED78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85156A392CA6BFD20061ED78;
+			remoteInfo = Chital;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		4C504D7A2CBF422C007E8796 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85156A3A2CA6BFD20061ED78 /* Chital.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chital.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,7 +47,12 @@
 		85156A532CA6C0210061ED78 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		85156A542CA6C0210061ED78 /* ChatModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
 		85156A552CA6C0210061ED78 /* ChatThreadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatThreadView.swift; sourceTree = "<group>"; };
+		D0ED4FDD2DAA29CF00787DA3 /* ChitalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChitalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D0ED4FDE2DAA29CF00787DA3 /* ChitalTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ChitalTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		85156A372CA6BFD20061ED78 /* Frameworks */ = {
@@ -48,6 +63,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0ED4FDA2DAA29CF00787DA3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -55,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				85156A3C2CA6BFD20061ED78 /* Chital */,
+				D0ED4FDE2DAA29CF00787DA3 /* ChitalTests */,
 				85156A3B2CA6BFD20061ED78 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				85156A3A2CA6BFD20061ED78 /* Chital.app */,
+				D0ED4FDD2DAA29CF00787DA3 /* ChitalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,6 +142,29 @@
 			productReference = 85156A3A2CA6BFD20061ED78 /* Chital.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D0ED4FDC2DAA29CF00787DA3 /* ChitalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0ED4FE52DAA29CF00787DA3 /* Build configuration list for PBXNativeTarget "ChitalTests" */;
+			buildPhases = (
+				D0ED4FD92DAA29CF00787DA3 /* Sources */,
+				D0ED4FDA2DAA29CF00787DA3 /* Frameworks */,
+				D0ED4FDB2DAA29CF00787DA3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0ED4FE22DAA29CF00787DA3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D0ED4FDE2DAA29CF00787DA3 /* ChitalTests */,
+			);
+			name = ChitalTests;
+			packageProductDependencies = (
+			);
+			productName = ChitalTests;
+			productReference = D0ED4FDD2DAA29CF00787DA3 /* ChitalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -125,11 +172,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1540;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					85156A392CA6BFD20061ED78 = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					D0ED4FDC2DAA29CF00787DA3 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 85156A392CA6BFD20061ED78;
 					};
 				};
 			};
@@ -150,6 +201,7 @@
 			projectRoot = "";
 			targets = (
 				85156A392CA6BFD20061ED78 /* Chital */,
+				D0ED4FDC2DAA29CF00787DA3 /* ChitalTests */,
 			);
 		};
 /* End PBXProject section */
@@ -161,6 +213,13 @@
 			files = (
 				85156A472CA6BFD30061ED78 /* Preview Assets.xcassets in Resources */,
 				85156A442CA6BFD30061ED78 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0ED4FDB2DAA29CF00787DA3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +243,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0ED4FD92DAA29CF00787DA3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D0ED4FE22DAA29CF00787DA3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85156A392CA6BFD20061ED78 /* Chital */;
+			targetProxy = D0ED4FE12DAA29CF00787DA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		85156A492CA6BFD30061ED78 /* Debug */ = {
@@ -365,6 +439,40 @@
 			};
 			name = Release;
 		};
+		D0ED4FE32DAA29CF00787DA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourname.ChitalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chital.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chital";
+			};
+			name = Debug;
+		};
+		D0ED4FE42DAA29CF00787DA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourname.ChitalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chital.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chital";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -382,6 +490,15 @@
 			buildConfigurations = (
 				85156A4C2CA6BFD30061ED78 /* Debug */,
 				85156A4D2CA6BFD30061ED78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0ED4FE52DAA29CF00787DA3 /* Build configuration list for PBXNativeTarget "ChitalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0ED4FE32DAA29CF00787DA3 /* Debug */,
+				D0ED4FE42DAA29CF00787DA3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

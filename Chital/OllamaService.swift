@@ -1,6 +1,16 @@
 import Foundation
 import SwiftUI
 
+// --- Protocol for Network Session ---
+protocol NetworkSession {
+    func data(for request: URLRequest) async throws -> (Data, URLResponse)
+    func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse)
+}
+
+// --- Make URLSession conform ---
+extension URLSession: NetworkSession {}
+// --- Protocol End ---
+
 struct OllamaChatMessage: Codable {
     let role: String
     let content: String
@@ -34,12 +44,21 @@ class OllamaService {
     @AppStorage("ollamaBaseURL") private var baseURLString = AppConstants.ollamaDefaultBaseURL
     @AppStorage("contextWindowLength") private var contextWindowLength = AppConstants.contextWindowLength
     
+    private let session: NetworkSession // Use the protocol type
+    
     private var baseURL: URL {
         guard let url = URL(string: baseURLString) else {
             fatalError("Invalid base URL: \(baseURLString)")
         }
         return url
     }
+    
+    // --- Initializers ---
+    // Default initializer for the app
+    init(session: NetworkSession = URLSession.shared) {
+        self.session = session
+    }
+    // --- Initializers End ---
     
     func sendSingleMessage(model: String, messages: [OllamaChatMessage]) async throws -> String {
         let url = baseURL.appendingPathComponent("chat")
@@ -50,7 +69,8 @@ class OllamaService {
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.httpBody = try JSONEncoder().encode(payload)
         
-        let (data, _) = try await URLSession.shared.data(for: req)
+        // Use the injected session
+        let (data, _) = try await session.data(for: req)
         let res = try JSONDecoder().decode(OllamaChatResponse.self, from: data)
         
         return res.message?.content ?? ""
@@ -68,7 +88,8 @@ class OllamaService {
                     req.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     req.httpBody = try JSONEncoder().encode(payload)
                     
-                    let (stream, _) = try await URLSession.shared.bytes(for: req)
+                    // Use the injected session
+                    let (stream, _) = try await session.bytes(for: req)
                     
                     for try await line in stream.lines {
                         try Task.checkCancellation()
@@ -83,6 +104,8 @@ class OllamaService {
                             }
                         }
                     }
+                    // Handle cases where the loop finishes without a 'done' message if necessary
+                    continuation.finish() 
                 } catch {
                     continuation.finish(throwing: error)
                 }
@@ -96,7 +119,8 @@ class OllamaService {
         var req = URLRequest(url: url)
         req.httpMethod = "GET"
         
-        let (data, _) = try await URLSession.shared.data(for: req)
+        // Use the injected session
+        let (data, _) = try await session.data(for: req)
         let res = try JSONDecoder().decode(OllamaModelResponse.self, from: data)
         
         return res.models.map { $0.name }
