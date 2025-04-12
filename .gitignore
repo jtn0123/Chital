@@ -1,0 +1,12 @@
+# Xcode
+build/
+DerivedData/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# User Settings
+*.xcuserdatad/
+*.xcscheme
+xcuserdata/ 
